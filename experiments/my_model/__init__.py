@@ -192,9 +192,13 @@ class MyModel(openprotein.BaseModel):
             drmsd_avg = drmsd_avg.cuda()
         angular_loss = calc_angular_difference(emissions, emissions_actual)
 
-        if (processed_minibatches < minimum_updates*(20/100)):
-            normalized_angular_loss = angular_loss/5
-            return normalized_angular_loss
+        # if (processed_minibatches < minimum_updates*(20/100)):
+        #     normalized_angular_loss = angular_loss/5
+        #     return normalized_angular_loss
+        normalized_angular_loss = angular_loss/5
 
         normalized_drmsd_avg = drmsd_avg/80
-        return normalized_drmsd_avg
+        print("angle normalized", normalized_angular_loss)
+        print("rmsd normalized", normalized_drmsd_avg)
+        print("sum", (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6))
+        return (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6)
