@@ -78,13 +78,14 @@ class BaseModel(nn.Module):
         # if (processed_minibatches < minimum_updates*(20/100)):
         #     normalized_angular_loss = angular_loss/5
         #     return normalized_angular_loss
-        normalized_angular_loss = angular_loss / 5
+        #normalized_angular_loss = angular_loss / 5
 
-        normalized_drmsd_avg = drmsd_avg / 80
-        print("angle normalized", normalized_angular_loss)
-        print("rmsd normalized", normalized_drmsd_avg)
-        print("sum", (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6))
-        return (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6)
+        #normalized_drmsd_avg = drmsd_avg / 80
+        print("angle", angular_loss)
+        #print("rmsd normalized", normalized_drmsd_avg)
+        #print("sum", (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6))
+        #return (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6)
+        return angular_loss
 
     def forward(self, original_aa_string):
         return self._get_network_emissions(original_aa_string)
