@@ -165,4 +165,4 @@ class MyModel(openprotein.BaseModel):
 
         output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
 
-        return output_angles, backbone_atoms_padded, batch_sizes
+        return output_angles, backbone_atoms_padded, batch_sizes_backbone
