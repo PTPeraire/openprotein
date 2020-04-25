@@ -52,7 +52,7 @@ class BaseModel(nn.Module):
 
         return embed_tensor
 
-    def compute_loss(self, minibatch, processed_minibatches):
+    def compute_loss(self, minibatch, processed_minibatches, minimum_updates):
         (original_aa_string, actual_coords_list, _) = minibatch
 
         emissions, _backbone_atoms_padded, _batch_sizes = \
@@ -75,7 +75,7 @@ class BaseModel(nn.Module):
             drmsd_avg = drmsd_avg.cuda()
         angular_loss = calc_angular_difference(emissions, emissions_actual)
 
-        if (processed_minibatches < 50):
+        if (processed_minibatches < minimum_updates*(20/100)):
             return angular_loss
         return drmsd_avg
 

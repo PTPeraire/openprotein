@@ -42,7 +42,7 @@ def train_model(data_set_identifier, model, train_loader, validation_loader,
         for _minibatch_id, training_minibatch in enumerate(train_loader, 0):
             minibatches_proccesed += 1
             start_compute_loss = time.time()
-            loss = model.compute_loss(training_minibatch, minibatches_proccesed)
+            loss = model.compute_loss(training_minibatch, minibatches_proccesed, minimum_updates)
             write_out("Train loss:", float(loss))
             start_compute_grad = time.time()
             loss.backward()
