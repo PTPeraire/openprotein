@@ -68,7 +68,7 @@ class MyModel(openprotein.BaseModel):
         self.linear_transform = nn.Linear(embedding_size + 9 + self.msg_output_size, 9, bias=True)
         #Angles layer
         self.number_angles = 3
-        self.input_to_angles = nn.Linear(9, self.number_angles)
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
 
     def apply_message_function(self, aa_features):
         # aa_features: msg_count * 2 * feature_count
@@ -168,4 +168,4 @@ class MyModel(openprotein.BaseModel):
         print(batch_sizes)
         print(batch_sizes_backbone)
 
-        return output_angles, backbone_atoms_padded, batch_sizes, batch_sizes_backbone
+        return output_angles, backbone_atoms_padded, batch_sizes
