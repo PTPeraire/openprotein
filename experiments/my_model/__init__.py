@@ -12,6 +12,7 @@ import openprotein
 from preprocessing import process_raw_data
 from training import train_model
 from torch.nn.utils.rnn import pad_sequence
+import time
 
 from util import get_backbone_positions_from_angles, contruct_dataloader_from_disk, initial_pos_from_aa_string, pass_messages, write_out, calc_avg_drmsd_over_minibatch
 
