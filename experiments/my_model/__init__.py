@@ -165,7 +165,36 @@ class MyModel(openprotein.BaseModel):
 
         output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
 
-        print(batch_sizes)
-        print(batch_sizes_backbone)
-
         return output_angles, backbone_atoms_padded, batch_sizes
+
+    def compute_loss(self, minibatch, processed_minibatches, minimum_updates):
+
+        (original_aa_string, actual_coords_list, _) = minibatch
+
+        emissions, _backbone_atoms_padded, _batch_sizes = \
+            self._get_network_emissions(original_aa_string)
+        actual_coords_list_padded = torch.nn.utils.rnn.pad_sequence(actual_coords_list)
+        if self.use_gpu:
+            actual_coords_list_padded = actual_coords_list_padded.cuda()
+        start = time.time()
+        if isinstance(_batch_sizes[0], int):
+            _batch_sizes = torch.tensor(_batch_sizes)
+        emissions_actual, _ = \
+            calculate_dihedral_angles_over_minibatch(actual_coords_list_padded,
+                                                     _batch_sizes,
+                                                     self.use_gpu)
+        drmsd_avg = calc_avg_drmsd_over_minibatch(_backbone_atoms_padded, actual_coords_list_padded, _batch_sizes)
+
+
+        write_out("Angle calculation time:", time.time() - start)
+        if self.use_gpu:
+            emissions_actual = emissions_actual.cuda()
+            drmsd_avg = drmsd_avg.cuda()
+        angular_loss = calc_angular_difference(emissions, emissions_actual)
+
+        if (processed_minibatches < minimum_updates*(20/100)):
+            normalized_angular_loss = angular_loss/5
+            return normalized_angular_loss
+
+        normalized_drmsd_avg = drmsd_avg/80
+        return normalized_drmsd_avg
