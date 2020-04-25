@@ -75,6 +75,8 @@ class BaseModel(nn.Module):
             drmsd_avg = drmsd_avg.cuda()
         angular_loss = calc_angular_difference(emissions, emissions_actual)
 
+
+
         if (processed_minibatches < minimum_updates*(20/100)):
             return angular_loss
         return drmsd_avg
