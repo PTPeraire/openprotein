@@ -13,7 +13,7 @@ from preprocessing import process_raw_data
 from training import train_model
 from torch.nn.utils.rnn import pad_sequence
 
-from util import get_backbone_positions_from_angles, contruct_dataloader_from_disk
+from util import get_backbone_positions_from_angles, contruct_dataloader_from_disk, initial_pos_from_aa_string, pass_messages, write_out, calc_avg_drmsd_over_minibatch
 
 ANGLE_ARR = torch.tensor([[-120, 140, -370], [0, 120, -150], [25, -120, 150]]).float()
 
@@ -58,7 +58,7 @@ class MyModel(openprotein.BaseModel):
         super(MyModel, self).__init__(use_gpu, embedding_size)
         self.use_gpu = use_gpu
         #RMSD layer
-        self.recurrent_step = 2
+        self.recurrent_steps = 2
         self.hidden_size = 50
         self.msg_output_size = 50
         self.output_size = 9  # 3 dimensions * 3 coordinates for each aa
