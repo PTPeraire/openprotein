@@ -75,16 +75,16 @@ class BaseModel(nn.Module):
             drmsd_avg = drmsd_avg.cuda()
         angular_loss = calc_angular_difference(emissions, emissions_actual)
 
-        if (processed_minibatches < minimum_updates*(20/100)):
-             normalized_angular_loss = angular_loss/5
-             return normalized_angular_loss
-        #normalized_angular_loss = angular_loss / 5
+        if (processed_minibatches < minimum_updates*(40/100)):
+             multiplier=processed_minibatches/minimum_updates
+
+        normalized_angular_loss = angular_loss / 5
         print("angle", angular_loss)
-        normalized_drmsd_avg = drmsd_avg / 80
-        #print("rmsd normalized", normalized_drmsd_avg)
-        #print("sum", (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6))
-        #return (normalized_drmsd_avg * 0.4) + (normalized_angular_loss * 0.6)
-        return normalized_drmsd_avg
+        normalized_drmsd_avg = drmsd_avg / 100
+        print("rmsd normalized", normalized_drmsd_avg)
+        print("sum", (normalized_drmsd_avg * multiplier) + (normalized_angular_loss * (1-multiplier)))
+        return (normalized_drmsd_avg * multiplier) + (normalized_angular_loss * (1-multiplier))
+
 
     def forward(self, original_aa_string):
         return self._get_network_emissions(original_aa_string)
