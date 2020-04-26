@@ -81,10 +81,7 @@ class BaseModel(nn.Module):
              multiplier=processed_minibatches/minimum_updates
 
         normalized_angular_loss = angular_loss / 5
-        print("angle", angular_loss)
         normalized_drmsd_avg = drmsd_avg / 100
-        print("rmsd normalized", normalized_drmsd_avg)
-        print("sum", (normalized_drmsd_avg * multiplier) + (normalized_angular_loss * (1-multiplier)))
         return (normalized_drmsd_avg * multiplier) + (normalized_angular_loss * (1-multiplier))
 
 
