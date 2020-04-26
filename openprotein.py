@@ -74,7 +74,9 @@ class BaseModel(nn.Module):
             emissions_actual = emissions_actual.cuda()
             drmsd_avg = drmsd_avg.cuda()
         angular_loss = calc_angular_difference(emissions, emissions_actual)
-
+        
+        multiplier=0.4
+        
         if (processed_minibatches < minimum_updates*(40/100)):
              multiplier=processed_minibatches/minimum_updates
 
